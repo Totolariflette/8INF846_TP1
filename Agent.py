@@ -20,5 +20,3 @@ class Agent:
             if e in [2, 3]:
                 format = {}  # TODO formatage des données de la pièce
                 rooms_to_clean.append(format)
-
-
