@@ -1,9 +1,11 @@
+import numpy as np
+
 
 class Sensors:
     def __init__(self):
         self.x = 0
         self.y = 0
-        self.sensors = Sensors()
+        self.matrix = np.zeros((5, 5))
 
-    def setMatrix(self, matrix):
+    def set_matrix(self, matrix):
         self.matrix = matrix

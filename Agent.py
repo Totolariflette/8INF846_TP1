@@ -1,6 +1,6 @@
 import numpy as np
-import Sensors
-import Environment
+from Sensors import Sensors
+from Environment import Environment
 
 
 class Agent:
@@ -9,7 +9,7 @@ class Agent:
         self.sensors = Sensors()
 
     def update_sensors(self, env: Environment):
-        self.sensors.setMatrix(env.get_matrix())
+        self.sensors.set_matrix(env.get_matrix())
 
     def get_action(self, env: Environment):
         pass

@@ -1,5 +1,6 @@
 import numpy as np
 from random import randrange
+import time
 
 
 # Etats :
@@ -16,29 +17,29 @@ class Environment:
         return self.matrix.copy()
 
     def update_environment(self):
-        # Générer saleté
-        will_add_dirt = randrange(100)
-        if will_add_dirt > 75:
-            x = randrange(5)
-            y = randrange(5)
-            self.add_dirt(x, y)
-        will_add_jewel = randrange(100)
-        # Générer bijou
-        if will_add_jewel > 90:
-            x = randrange(5)
-            y = randrange(5)
-            self.add_jewel(x, y)
+        while True:
+            # Générer saleté
+            probability = randrange(100)
+            if probability > 75:
+                x = randrange(5)
+                y = randrange(5)
+                self.add_dirt(x, y)
+            # Générer bijou
+            if probability < 10:
+                x = randrange(5)
+                y = randrange(5)
+                self.add_jewel(x, y)
+
+            time.sleep(2)
 
     def add_dirt(self, x, y):
-        case = self.matrix[x][y]
-        if case == 0:
-            case = 2
-        elif case == 1:
-            case = 3
+        if self.matrix[x][y] == 0:
+            self.matrix[x][y] = 2
+        elif self.matrix[x][y] == 1:
+            self.matrix[x][y] = 3
 
     def add_jewel(self, x, y):
-        case = self.matrix[x][y]
-        if case == 0:
-            case = 1
-        elif case == 2:
-            case = 3
+        if self.matrix[x][y] == 0:
+            self.matrix[x][y] = 1
+        elif self.matrix[x][y] == 2:
+            self.matrix[x][y] = 3
