@@ -1,23 +1,25 @@
-from Agent import Agent
-from Environment import Environment
 import threading
-import time
+from time import sleep
+import os
+clear = lambda: os.system('cls')
+
+from Agents import Agent_1
+from Environment import Environment
+from searchTree import depthFirstSearch,breadthFirstSearch
 
 
 if __name__ == "__main__":
-    agent = Agent()
-    env = Environment()
+    env = Environment(5,5,p_dirt=0.25,p_jewel=0)
+    aspi = Agent_1(env,breadthFirstSearch)  
 
-    x = threading.Thread(target=env.update_environment, args=())
-    x.start()
+
+    #x = threading.Thread(target=env.update_environment, args=())
+    #x.start()
 
     while True:
-        # get the environment
-        # agent.update_sensors(env)
-        # Action
-        # agent.get_action(env)
-
-        # Thread sleep & tests
-        print("Main Thread is up")
-        print(env.get_matrix())
-        time.sleep(2)
+        clear()
+        env.update()
+        msg =aspi.getAction(env)
+        env.agent_update(msg)
+        env.show(str(msg))
+        sleep(1)
