@@ -24,7 +24,7 @@ class Agent_1(Agent):
 
         
 
-    def update_state(self,percept):
+    def update_state(self,percept): #= sensor
         self.state={'grid':percept.get_grid(),'pos':percept.agent,'nb_dust':count_dust(percept.get_grid())}
 
 
@@ -92,4 +92,3 @@ class Problem_1(Problem):
             succ.append((n_state,act))
         return succ
                     
-       

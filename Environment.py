@@ -25,7 +25,7 @@ class Environment():
             else  : self.grid[i][j] = 'b'
 
 
-    def agent_update(self,action):
+    def agent_update(self,action): # = effector 
         if action in DIRECTIONS :
             self.agent = (self.agent[0]+action[0],self.agent[1]+action[1])
             
@@ -34,7 +34,7 @@ class Environment():
 
         
 
-    def show(self,msg):
+    def show(self,msg=''):
         for j in range(self.height):
             for i in range(self.width):
                 #print(i,j,end="|")
