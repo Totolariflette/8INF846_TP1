@@ -18,6 +18,13 @@ def count_dust(grid):
             if case == 'd' : c+=1
     return c
 
+def get_dirty_room(grid):
+    c=[]
+    for i,ligne in enumerate(grid) :
+        for j,case in enumerate(ligne):
+            if case == 'd' : c.append((i,j))
+    return c
+
 
 def legal_moves(grid,pos):
     moves = {'ASPI','RAM'}

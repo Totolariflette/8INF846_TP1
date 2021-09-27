@@ -1,5 +1,5 @@
 from copy import deepcopy
-from util import legal_moves,count_dust,DIRECTIONS,STAY
+from util import legal_moves,count_dust,get_dirty_room, DIRECTIONS,STAY
 
 class Agent():
 
@@ -18,7 +18,7 @@ class Agent_1(Agent):
         self.seq=[]
         self.update_state(initial_percept)
         self.goal = lambda state : state["nb_dust"]==0
-        self.init_problem(self.state,self.goal)
+        self.init_problem()
         self.algo = algo
         self.search()
 
@@ -28,14 +28,13 @@ class Agent_1(Agent):
         self.state={'grid':percept.get_grid(),'pos':percept.agent,'nb_dust':count_dust(percept.get_grid())}
 
 
-    def init_problem(self,state,goal) :
-        self.problem = Problem_1(deepcopy(self.state),goal)
+    def init_problem(self) :
+        self.problem = Problem_1(deepcopy(self.state),self.goal)
 
     def search(self) :
         self.seq = self.algo(self.problem)
         #print(self.seq)
         
-
 
 
     def getAction(self,percept):
