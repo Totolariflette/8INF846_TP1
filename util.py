@@ -15,7 +15,7 @@ def count_dust(grid):
     c=0
     for ligne in grid :
         for case in ligne:
-            if case == 'd' : c+=1
+            if case == 'd' or case =='b' : c+=1
     return c
 
 def get_dirty_room(grid):
