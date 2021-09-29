@@ -51,7 +51,7 @@ def nullHeuristic(state, problem=None):
     """
     return 0
 
-def aStarSearch(problem, heuristic=nullHeuristic):
+def aStarSearch(start_state,is_goal,succesor_fct, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
     
@@ -64,32 +64,33 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     closedList = list()
 
     # les noeuds corresponde aux  etats.
-    state = problem.getStartState()
+    state = start_state
     #on cr e e un dictionnaire pour associer a chaque etat les information : 
     #  - dist : cout depuis le noeud initial
     #  - prio : la valeur de priorit e de l"etat dans la file
     #  - path : le chemin jusqu'a cet etat avec ce cout et cette priorit e
     nodeInfo=dict()
-    nodeInfo[state] = {"dist":0,"prio":0,"path":[]}
+    nodeInfo[str(state)] = {"dist":0,"prio":0,"path":[]}
     openList.push(state,0)#on place l'etat initial dans la file
 
     while not openList.isEmpty():
         state = openList.pop() #on r ecup ere l'etat avec la prio la plus basse
-        cdist = nodeInfo[state]["dist"] #et les infos associ es
-        cpath = nodeInfo[state]["path"]
-        if (problem.isGoalState(state)): # si c'est la solution on renvoie le chemin 
+        cdist = nodeInfo[str(state)]["dist"] #et les infos associ es
+        cpath = nodeInfo[str(state)]["path"]
+        if (is_goal(state)): # si c'est la solution on renvoie le chemin 
             return cpath
-        for suc in problem.getSuccessors(state):# pour tous les successeurs de l'etat courant:
+        for suc in succesor_fct(state):# pour tous les successeurs de l'etat courant:
             if not (suc[0] in closedList): #si on ne la pas deja parcouru ( dans closedlist)
                 #on calcule la priorit e du successeur en fonction de sa distance et de l'heuristique
                 g= cdist+suc[2]
-                h=heuristic(suc[0],problem)
+                h=heuristic(suc[0])
                 p= h+g
-                if nodeInfo.has_key(suc[0]) and nodeInfo[suc[0]]["prio"]<p : # si le noeud existe deja dans la file avec une priorit e inferieur
+                if str(suc[0]) in nodeInfo and nodeInfo[str(suc[0])]["prio"]<p : # si le noeud existe deja dans la file avec une priorit e inferieur
                     pass # on ne fait rien
                 else : # sinon on place le noeud dans la file ( ou on le met a jour)
-                    nodeInfo[suc[0]]= {"dist":g,"prio":p,"path":cpath+[suc[1]]}
+                    nodeInfo[str(suc[0])]= {"dist":g,"prio":p,"path":cpath+[suc[1]]}
                     openList.update(suc[0],p)
         closedList.append(state)#on place ensuite le noeud courant dans la liste des noeuds deja visit e
+       
             
               

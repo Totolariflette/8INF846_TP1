@@ -22,7 +22,14 @@ def get_dirty_room(grid):
     c=[]
     for i,ligne in enumerate(grid) :
         for j,case in enumerate(ligne):
-            if case == 'd' : c.append((i,j))
+            if case in 'db' : c.append((i,j))
+    return c
+
+def get_jewel(grid):
+    c=[]
+    for i,ligne in enumerate(grid) :
+        for j,case in enumerate(ligne):
+            if case == 'jb' : c.append((i,j))
     return c
 
 

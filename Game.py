@@ -2,9 +2,9 @@ import threading
 from time import sleep
 import os
 
-from Agents import Agent1
+from Agents import Agent1,Agent2
 from Environment import Environment
-from searchTree import depth_first_search, breadth_first_search
+from searchTree import depth_first_search, breadth_first_search,aStarSearch
 
 clear = lambda: os.system('cls')
 
@@ -27,7 +27,7 @@ def agent_loop(agent, env):
 
 if __name__ == "__main__":
     env = Environment(5, 5, p_dust=0.25, p_jewel=0.05)
-    aspi = Agent1(env, breadth_first_search)
+    aspi = Agent2(env,aStarSearch)
 
     x = threading.Thread(target=env_loop, args=(env,))
     x.start()
