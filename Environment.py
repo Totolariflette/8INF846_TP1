@@ -45,8 +45,12 @@ class Environment:
 
         
         if action == 'ASPI':
-            if self.grid[self.agent[0]][self.agent[1]] == 'd' : self.compteurs["dust_aspi"]+=1
-            if self.grid[self.agent[0]][self.agent[1]] == 'j' : self.compteurs["jewel_aspi"]+=1
+            if self.grid[self.agent[0]][self.agent[1]] == 'd' : 
+                self.compteurs["dust_aspi"]+=1
+                self.compteurs["nb_dust"]-=1
+            if self.grid[self.agent[0]][self.agent[1]] == 'j' :
+                self.compteurs["jewel_aspi"]+=1
+                self.compteurs["nb_jewel"]-=1
             self.grid[self.agent[0]][self.agent[1]] = 'p'
 
         if action == 'RAM':

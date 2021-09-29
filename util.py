@@ -33,6 +33,12 @@ def legal_moves(grid,pos):
             moves.add(d)
     return moves
     
+def legal_moves_dim(dim,pos):
+    moves = {'ASPI','RAM'}
+    for d in DIRECTIONS:
+        if 0<=pos[0]+d[0]<dim[0] and 0<=pos[1]+d[1]<dim[1] :
+            moves.add(d)
+    return moves
 
 class Stack:
     "A container with a last-in-first-out (LIFO) queuing policy."
