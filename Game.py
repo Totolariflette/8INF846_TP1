@@ -16,6 +16,7 @@ def env_loop(env):
         clear()
         env.update()
         env.show()
+        env.show_graphique()
         sleep(1)
 
 
@@ -60,6 +61,10 @@ if __name__ == "__main__":
     x.start()
     y = threading.Thread(target=agent_loop, args=(aspi, env))
     y.start()
+    
+    kill = threading.Event()
+    y.join()
+    
 
     # while True:
     #     clear()
