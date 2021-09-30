@@ -11,6 +11,9 @@ from searchTree import depth_first_search, breadth_first_search,aStarSearch
 
 clear = lambda: os.system('cls')
 
+FREQ_LEARN = 25
+
+
 
 def env_loop(env):
     fenetre = Tk()
@@ -22,15 +25,20 @@ def env_loop(env):
         env.update()
         env.show()
         env.show_graphique(fenetre)
-        sleep(1)
+        sleep(0.25)
 
 
 def agent_loop(agent, env):
+    c=1
     while True:
+        print("iter : "+str(c)+" Score : "+str(agent.score)+ " Freq : "+str(agent.freq))
         agent.sensor(env)
         action = agent.get_action()
         env.agent_update(action)
-        sleep(1)
+        if env.tour >= c*FREQ_LEARN  :
+            agent.learn(env.get_score())
+            c+=1
+        sleep(0.25)
 
 
 def menu_select_agent():
@@ -59,7 +67,7 @@ def menu_select_agent():
 
 
 if __name__ == "__main__":
-    env = Environment(5, 5, p_dirt=0.25, p_jewel=0.05)
+    env = Environment(5, 5, p_dust=0.25, p_jewel=0.05)
     aspi = menu_select_agent()
 
     x = threading.Thread(target=env_loop, args=(env,))
@@ -67,15 +75,20 @@ if __name__ == "__main__":
     y = threading.Thread(target=agent_loop, args=(aspi, env))
     y.start()
     
-    kill = threading.Event()
     y.join()
+   
     
-
+    
+    # c =0
     # while True:
     #     clear()
+    #     print("iter : "+str(c)+" Score : "+str(aspi.score)+ " Freq : "+str(aspi.freq))
+    #     c+=1
     #     env.update()
     #     aspi.sensor(env)
     #     action = aspi.get_action()
+    #     if c%FREQ_LEARN == 0 :
+    #         aspi.learn(env.get_score())
     #     env.agent_update(action)
     #     env.show()
     #     sleep(1)

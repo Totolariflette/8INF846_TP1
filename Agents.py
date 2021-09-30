@@ -10,7 +10,9 @@ class Agent_but:
         self.goal = goal # l'état qui correspond au but 
         
         self.algo = algo # alogorithme de recherche dans un arbre (input : problem : output : seq)
-       
+        self.score = 0
+        self.freq = 1 
+        self.tour =0
         self.search()
     
     def is_goal(self,state):
@@ -19,16 +21,28 @@ class Agent_but:
     def sensor(self, percept): 
         self.bstate = {'grid': percept.get_grid(), 'pos': percept.agent}
 
-  
+    
     def get_succesor(self,state):
         pass
     
     def search(self) :
         self.seq = self.algo(self.bstate,self.is_goal,self.get_succesor)
         #print(self.seq)
+
+    def learn(self,score):
+        if self.score < score :
+            self.freq +=1
+        elif self.freq > 1:
+            self.freq -= 1
+        self.score = score
+
         
 
     def get_action(self):
+
+        self.tour+=1
+        if self.tour % self.freq == 0 :
+            self.search()
         
         while len(self.seq) > 0:
             action = self.seq.pop(0)
@@ -36,7 +50,6 @@ class Agent_but:
             print(self.state)
             return action
         
-        self.search()
         return STAY
 
 
