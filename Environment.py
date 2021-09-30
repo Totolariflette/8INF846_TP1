@@ -54,12 +54,9 @@ class Environment:
 
             print("|")
 
-    def show_graphique(self, msg=''):
+    def show_graphique(self,fenetre,msg=''):
             #--- Fenêtre Principale ---
-        fenetre = Tk()
-        fenetre.configure(bg='light blue')
-        fenetre.title("IA_TP1")
-        fenetre.resizable(0,0)
+        
 
         #--- Chargement des images ---
         imgAgent= ImageTk.PhotoImage(PIL.Image.open("Agent.png")) 
@@ -107,8 +104,8 @@ class Environment:
                 if j == self.agent[1] and i == self.agent[0]: 
                     caneva.create_image(coordX,coordY,image=imgAgent,anchor=NW)
         fenetre.update()
-        fenetre.after(3000,lambda:fenetre.destroy())
-        fenetre.mainloop()  
+        #fenetre.after(3000,lambda:fenetre.destroy())
+        #fenetre.mainloop()  
 
     def get_grid(self):
         return deepcopy(self.grid.copy())

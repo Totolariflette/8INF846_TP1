@@ -3,6 +3,7 @@ import time
 from time import sleep
 import os
 import sys
+from tkinter import *
 
 from Agents import Agent1,Agent2
 from Environment import Environment
@@ -12,11 +13,15 @@ clear = lambda: os.system('cls')
 
 
 def env_loop(env):
+    fenetre = Tk()
+    fenetre.configure(bg='light blue')
+    fenetre.title("IA_TP1")
+    fenetre.resizable(0,0)
     while True:
         clear()
         env.update()
         env.show()
-        env.show_graphique()
+        env.show_graphique(fenetre)
         sleep(1)
 
 
