@@ -1,6 +1,8 @@
 import threading
+import time
 from time import sleep
 import os
+import sys
 
 from Agents import Agent1,Agent2
 from Environment import Environment
@@ -25,9 +27,34 @@ def agent_loop(agent, env):
         sleep(1)
 
 
+def menu_select_agent():
+    clear = lambda: os.system('cls')
+
+    print("""
+    
+    Veuillez selectionner un algorithme :
+        1. Non informé
+        2. Informé
+        
+        3. Exit the program
+    """)
+    ans = input("")
+    if ans == "1":
+        return Agent1(env, breadth_first_search)
+    elif ans == "2":
+        return Agent2(env, aStarSearch)
+    elif ans == "3":
+        sys.exit()
+    else:
+        print("Valeur incorrecte")
+        time.sleep(2)
+        clear()
+        menu_select_agent()
+
+
 if __name__ == "__main__":
-    env = Environment(5, 5, p_dust=0.25, p_jewel=0.05)
-    aspi = Agent2(env,aStarSearch)
+    env = Environment(5, 5, p_dirt=0.25, p_jewel=0.05)
+    aspi = menu_select_agent()
 
     x = threading.Thread(target=env_loop, args=(env,))
     x.start()

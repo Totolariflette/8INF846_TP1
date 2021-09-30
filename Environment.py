@@ -1,61 +1,39 @@
 from random import randint, random
 from copy import deepcopy
-from util import DIRECTIONS, STAY, count_dust
+from util import DIRECTIONS, count_dust
 
 
 class Environment:
-    def __init__(self, width, height, initial_value='p', p_dust=0.25, p_jewel=0.01, pos_agt=(0, 0)):
+    def __init__(self, width, height, initial_value='p', p_dirt=0.25, p_jewel=0.01, pos_agt=(0, 0)):
         self.width = width
         self.height = height
         self.grid = [[initial_value for _ in range(width)] for _ in range(height)]
         self.p_jewel = p_jewel
-        self.p_dust = p_dust
+        self.p_dirt = p_dirt
         self.agent = pos_agt
-        self.compteurs = {"nb_dust":0,"nb_jewel":0,"dust_aspi":0,'jewel_aspi':0,"jewel_gobbed":0,"cost":0}
 
     def update(self):
-        if random() < self.p_dust:
+        if random() < self.p_dirt:
             i = randint(0, self.height - 1)
             j = randint(0, self.width - 1)
-            if self.grid[i][j] not in "jb":
+            if self.grid[i][j] != 'j':
                 self.grid[i][j] = 'd'
-                self.compteurs["nb_dust"]+=1
             else:
                 self.grid[i][j] = 'b'
-                self.compteurs["nb_dust"]+=1
         if random() < self.p_jewel:
             i = randint(0, self.width - 1)
             j = randint(0, self.height - 1)
-            if self.grid[i][j] not in "db" :
+            if self.grid[i][j] != 'd':
                 self.grid[i][j] = 'j'
-                self.compteurs["nb_jewel"]+=1
             else:
                 self.grid[i][j] = 'b'
-                self.compteurs["nb_jewel"]+=1
 
     def agent_update(self, action):  # = effector
-        if action != STAY :
-            self.compteurs["cost"]+=1
         if action in DIRECTIONS:
             self.agent = (self.agent[0] + action[0], self.agent[1] + action[1])
 
-        
         if action == 'ASPI':
-            if self.grid[self.agent[0]][self.agent[1]] == 'd' : 
-                self.compteurs["dust_aspi"]+=1
-                self.compteurs["nb_dust"]-=1
-            if self.grid[self.agent[0]][self.agent[1]] == 'j' :
-                self.compteurs["jewel_aspi"]+=1
-                self.compteurs["nb_jewel"]-=1
             self.grid[self.agent[0]][self.agent[1]] = 'p'
-
-        if action == 'RAM':
-            if self.grid[self.agent[0]][self.agent[1]] in 'bj' : self.compteurs["jewel_gobbed"]+=1
-            if self.grid[self.agent[0]][self.agent[1]]  == 'b':
-                self.grid[self.agent[0]][self.agent[1]] = 'd'
-            else :  
-                self.grid[self.agent[0]][self.agent[1]] = 'p'
-
 
     def show(self, msg=''):
         for j in range(self.height):
@@ -68,7 +46,7 @@ class Environment:
                 if j == self.agent[1] and i == self.agent[0]: p = '>'
                 print('|' + p, end='')
             if j == 1: print("|   " + msg + "   " + str(self.agent), end="")
-            if j == 3: print("|   " + str(self.compteurs), end="")
+            if j == 3: print("|   " + str(count_dust(self.grid)), end="")
 
             print("|")
 
