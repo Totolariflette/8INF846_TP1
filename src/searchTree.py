@@ -1,4 +1,4 @@
-import util
+import src.util as util
 
 
 def depth_first_search(start_state,is_goal,succesor_fct):
@@ -26,8 +26,7 @@ def depth_first_search(start_state,is_goal,succesor_fct):
 
 
 def breadth_first_search(start_state,is_goal,succesor_fct):
-    """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
+
 
     node = {"state": start_state, "path": []}  # noeud qui contient l'etat plus le chemin pour y acceder
     q = util.Queue()  # implementation avec une file
@@ -45,16 +44,11 @@ def breadth_first_search(start_state,is_goal,succesor_fct):
 
 
 def nullHeuristic(state, problem=None):
-    """
-    A heuristic function estimates the cost from the current state to the nearest
-    goal in the provided SearchProblem.  This heuristic is trivial.
-    """
+   
     return 0
 
 def aStarSearch(start_state,is_goal,succesor_fct, heuristic=nullHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    
+ 
     # On implemente A* avec une file de prorit e 
     #  3 methodes importante :
     #     -push(elmt,priorit e) insert un  element avec une priorit e associ e

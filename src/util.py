@@ -1,3 +1,8 @@
+"""
+Quelques fonctions utiles pour l'agent + implementation des piles, files et files de prioritées utilisés dans les algorithme de recherche.
+
+Implémentation des Piles files et files de priorité par John DeNero (denero@cs.berkeley.edu) pour l'université de  Berkeley, http://ai.berkeley.edu (The Pacman AI projects)
+"""
 
 import heapq
 
