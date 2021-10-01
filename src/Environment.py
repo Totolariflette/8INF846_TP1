@@ -7,6 +7,8 @@ from tkinter import *
 import time
 
 class Environment:
+    """Classe Environnement"""
+
     def __init__(self, width, height, initial_value='p', p_dust=0.25, p_jewel=0.01, pos_agt=(0, 0)):
         self.width = width
         self.height = height

@@ -39,8 +39,12 @@ def get_jewel(grid):
 
 
 def legal_moves(grid,pos):
-    moves = {'ASPI','RAM'}
-    for d in DIRECTIONS:
+    moves = set() # Enssemble vide
+    if grid[pos[0]][pos[1]] == 'd': # si la case est salle on peut aspirer
+        moves.add('ASPI')
+    if grid[pos[0]][pos[1]] == 'b': # si la case contient un bijoux et de la poussiere on rammase 
+        moves.add('RAM')
+    for d in DIRECTIONS: # Liste des dirrections possibles 
         if 0<=pos[0]+d[0]<len(grid) and 0<=pos[1]+d[1]<len(grid[0]) :
             moves.add(d)
     return moves

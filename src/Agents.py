@@ -1,4 +1,5 @@
 from copy import deepcopy
+from os import stat_result
 from src.util import legal_moves,count_dust,get_dirty_room, legal_moves_dim, get_jewel,DIRECTIONS,STAY
 
 
@@ -19,14 +20,14 @@ class Agent_but:
         self.apprenant =apprenant
 
         self.score = 0
-        self.periode = 10 
+        self.periode = 5
         self.tour =0
         self.limit = 5
         #self.search()
     
     def is_goal(self,state):
         """" Fonction prenant en entrée un etat et renvoyant vrai si l'etat est bien le but """
-        return (state[2]==0 and state[3]==0) # On a atteint le but si toutes les salles sont propres et qu'aucun bijoux n'a été aspiré
+        return state[2]==0 # On a atteint le but si toutes les salles sont propres 
 
     def sensor(self, percept): 
         grid = percept.get_grid()
@@ -54,6 +55,10 @@ class Agent_but:
         #print(self.seq)
 
     def learn(self,score):
+        """ mise à jour de la fréquence d'exploration, appelé si l'agent est apprennant 
+            compare le score au score au dernier apprentissage, si il le nouveau score 
+            est moins bon la  fréquence d'exploration augmente
+        """
         if self.score < score :
             self.periode+=1
         elif self.periode > 1:
@@ -61,11 +66,12 @@ class Agent_but:
         self.score = score
 
     def is_goal_limited(self,state):
-        """" Fonction prenant en entrée un etat et renvoyant vrai si l'etat est bien le but """
-        return (state[2]==self.bstate[2]-self.limit and state[3]==0) # On a atteint le but si toutes les salles sont propres et qu'aucun bijoux n'a été aspiré
+        """" Fonction de but reduite dans le cas ou le nombre de pousiere est trop important """
+        return (state[2]==self.bstate[2]-self.limit )
 
 
     def limit_search(self):
+        """ Si il y a trop de poussiere sur la map, le temps d'execution de l'algo de recherche devient trop long on rend donc le probleme plus facile temporairement"""
         self.seq = self.algo(self.bstate,self.is_goal_limited,self.get_succesor)
 
         
@@ -103,26 +109,19 @@ class Agent_aveugle(Agent_but):
             n_nb_dust = state[2]
             n_pos_x,n_pos_y = state[1]
             n_pos = (n_pos_x,n_pos_y)
-            n_jewel_gobbed = state[3]
+            
 
-            case =  n_grid[n_pos_x][n_pos_y]  
 
             if act in DIRECTIONS: # Soit le robot ce deplace on met à jour la position
                 n_pos = (n_pos_x + act[0], n_pos_y + act[1])
-            elif case not in 'pj' : # On ne considère pas les cas ou le robot aspire ou rammasse alors qu'il est sur une case vide ou un bijou, cela permet d'avoir moins de branches inutiles a explorer
-                if act == "ASPI":  # Soit il aspire, on met à jour l'etat 
+             
+            elif act == "ASPI" : # Si la case est salle il peut aspirer
                     n_grid[n_pos[0]][n_pos[1]] = 'p'
-                    if case == 'd':
-                        n_nb_dust -= 1
-                    if case == 'b' :
-                        n_nb_dust -= 1
-                        n_jewel_gobbed +=1
-                if act =="RAM": # soit il rammasse, on met à jour l'etat 
-                    if case == 'j' :
-                        n_grid[n_pos[0]][n_pos[1]] = 'p'
-                    if case == 'b' :
+                    n_nb_dust -= 1
+            elif act =="RAM": # si la case contient un bijou et de la poussiere on peut rammaser le bijoux
                         n_grid[n_pos[0]][n_pos[1]] = 'd'
-            n_state=(n_grid,n_pos,n_nb_dust,n_jewel_gobbed) 
+        
+            n_state=(n_grid,n_pos,n_nb_dust) 
             succ.append((n_state, act))
         return succ
 
@@ -148,32 +147,20 @@ class Agent_informe(Agent_but):
             n_nb_dust = state[2]
             n_pos_x,n_pos_y = state[1]
             n_pos = (n_pos_x,n_pos_y)
-            n_jewel_gobbed = state[3]
-
-            case =  n_grid[n_pos_x][n_pos_y]  
-
-            cost = 0 
+            
+            if act == STAY : cost= 0
+            else : cost=1
 
             if act in DIRECTIONS: # Soit le robot ce deplace on met à jour la position
                 n_pos = (n_pos_x + act[0], n_pos_y + act[1])
-                cost=1
-            elif case not in 'pj' : # On ne considère pas les cas ou le robot aspire ou rammasse alors qu'il est sur une case vide ou un bijou, cela permet d'avoir moins de branches inutiles a explorer
-                if act == "ASPI":  # Soit il aspire, on met à jour l'etat 
-                    cost=1
+             
+            elif act == "ASPI" : # Si la case est salle il peut aspirer
                     n_grid[n_pos[0]][n_pos[1]] = 'p'
-                    if case == 'd':
-                        n_nb_dust -= 1
-                    if case == 'b' :
-                        n_nb_dust -= 1
-                        n_jewel_gobbed +=1
-                        cost += 50
-                if act =="RAM": # soit il rammasse, on met à jour l'etat 
-                    cost +=1
-                    if case == 'j' :
-                        n_grid[n_pos[0]][n_pos[1]] = 'p'
-                    if case == 'b' :
+                    n_nb_dust -= 1
+            elif act =="RAM": # si la case contient un bijou et de la poussiere on peut rammaser le bijoux
                         n_grid[n_pos[0]][n_pos[1]] = 'd'
-            n_state=(n_grid,n_pos,n_nb_dust,n_jewel_gobbed) 
+        
+            n_state=(n_grid,n_pos,n_nb_dust) 
             succ.append((n_state, act,cost))
         return succ    
 
